@@ -9,7 +9,7 @@ namespace SurfacePacking
 {
     public class PackingThreadData
     { 
-        public static PackingThreadData Extract( MeshFilter target, MeshFilter slicer, float[] sizes )
+        public static PackingThreadData Extract( MeshFilter target, MeshFilter slicer, float[] sizes, MeshFilter remover = null )
         {
             Collider colliderSlicer = slicer.GetComponent<Collider>();
 
@@ -18,6 +18,18 @@ namespace SurfacePacking
                 var MC = slicer.gameObject.AddComponent<MeshCollider>();
                 MC.sharedMesh = slicer.sharedMesh;
                 colliderSlicer = MC;
+            }
+            
+            if( remover != null )
+            {
+                Collider colliderRemover = remover.GetComponent<Collider>();
+
+                if( colliderRemover == null )
+                {
+                    var MC = remover.gameObject.AddComponent<MeshCollider>();
+                    MC.sharedMesh = remover.sharedMesh;
+                    colliderRemover = MC;
+                }
             }
 
             Collider colliderTarget = target.GetComponent<Collider>();

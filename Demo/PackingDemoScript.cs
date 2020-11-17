@@ -11,6 +11,7 @@ namespace SurfacePacking
         [Header("Game Object References")]
         public MeshFilter slicer;
         public MeshFilter target;
+        public MeshFilter remover = null; // can be null
         public PackingDemoDraw draw;
 
         // Spheres Sizes 
@@ -35,14 +36,13 @@ namespace SurfacePacking
         PackingThreadData data;
         PackingProcess packing;
 
-        public bool Paused = true;
+        //public bool Paused = true;
 
-        void Update( )
-        {
-            if( packing != null ) packing.IsPaused = Paused;
-
-            Paused = true;
-        }
+        //void Update( )
+        //{
+        //    if( packing != null ) packing.IsPaused = Paused;
+        //    Paused = true;
+        //}
 
         void Start( )
         {
@@ -59,7 +59,7 @@ namespace SurfacePacking
             
             // Create data
             
-            data = PackingThreadData.Extract( target, slicer, sizes );
+            data = PackingThreadData.Extract( target, slicer, sizes, remover );
             
             if( draw != null ) draw.data = data;
 

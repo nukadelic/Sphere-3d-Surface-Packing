@@ -9,7 +9,7 @@
         PackingThreadData data;
         YieldProgress active;
 
-        public bool IsPaused = true;
+        public bool IsPaused = false;
 
         public bool IsActive => busy;
 
