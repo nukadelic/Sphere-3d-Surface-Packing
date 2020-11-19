@@ -9,7 +9,16 @@ namespace SurfacePacking
 {
     public class PackingThreadData
     { 
-        public static PackingThreadData Extract( MeshFilter target, MeshFilter slicer, float[] sizes, MeshFilter remover = null )
+        public void AddSubstractingCube( Transform target )
+        {
+            subtractingCubes.Add( new PrimitiveCubeData { 
+                position = target.position, 
+                localToWorld = target.localToWorldMatrix, 
+                worldToLocal = target.worldToLocalMatrix 
+            } );
+        }
+
+        public static PackingThreadData Extract( MeshFilter target, MeshFilter slicer, float[] sizes )
         {
             Collider colliderSlicer = slicer.GetComponent<Collider>();
 
@@ -20,18 +29,6 @@ namespace SurfacePacking
                 colliderSlicer = MC;
             }
             
-            if( remover != null )
-            {
-                Collider colliderRemover = remover.GetComponent<Collider>();
-
-                if( colliderRemover == null )
-                {
-                    var MC = remover.gameObject.AddComponent<MeshCollider>();
-                    MC.sharedMesh = remover.sharedMesh;
-                    colliderRemover = MC;
-                }
-            }
-
             Collider colliderTarget = target.GetComponent<Collider>();
 
             if( colliderTarget == null )
@@ -65,6 +62,8 @@ namespace SurfacePacking
             data.spaceWorldToSlicer = slicer.transform.worldToLocalMatrix;
             data.spaceTargetToWorld = target.transform.localToWorldMatrix;
             data.spaceWorldToTarget = target.transform.worldToLocalMatrix;
+            
+            data.subtractingCubes = new List<PrimitiveCubeData>();
 
             return data;
         }
@@ -72,7 +71,7 @@ namespace SurfacePacking
         
         public Vector3 positionTarget;
         public Vector3 positionSlicer;
-
+        
         public Collider colliderSlicer;
         public Collider colliderTarget;
 
@@ -81,6 +80,8 @@ namespace SurfacePacking
         public Matrix4x4 spaceWorldToTarget;
         public Matrix4x4 spaceSlicerToWorld;
         public Matrix4x4 spaceWorldToSlicer;
+
+        public List<PrimitiveCubeData> subtractingCubes;
 
         public Vector3[] verticesRaw;
         public int[] trianglesRaw;

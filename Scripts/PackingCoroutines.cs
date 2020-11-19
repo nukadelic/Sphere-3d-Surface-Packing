@@ -22,6 +22,10 @@ namespace SurfacePacking
             var start_time = Time.realtimeSinceStartup;
 
             var cooldown = start_time;
+            
+            //bool hasNegativeSpace = data.colliderRemover != null;
+
+            //bool hasNegativeSpace = data.subtractingCubes.Count > 0;
 
             float len = data.trianglesRaw.Length;
 
@@ -40,8 +44,7 @@ namespace SurfacePacking
                         yield return null;
                     }
                 }
-
-
+                
                 int in_bounds_count = 0;
 
                 Triangle triangle = new Triangle { xInRange = false,yInRange = false,zInRange = false };
@@ -51,17 +54,42 @@ namespace SurfacePacking
                     int ti = i + t;
 
                     var vi = data.trianglesRaw[ ti ];
-
+                    
+                    triangle.SetValueAt( t, vi );
+                    
                     var vert = data.verticesRaw[ vi ];
                     
                     var P = data.positionTarget + ( Vector3 ) ( data.spaceTargetToWorld * vert );
 
                     var R = new Ray( P, data.positionSlicer - P );
 
+                    if( data.PointIsInsideNegativeSpace( P ) ) continue;
+
+                    //if( hasNegativeSpace )
+                    //{
+                    //    bool found = false;
+
+                    //    foreach( var subCube in data.subtractingCubes )
+                    //    {
+                    //        if( subCube.ContainesWolrdPoint( P ) )
+                    //        {
+                    //            found=  true;
+                    //            break;
+                    //        }
+                    //    }
+
+                    //    if( found ) continue;
+
+                    //    //if(data.colliderRemover.Raycast( R, out RaycastHit hit_negative, float.MaxValue ))
+                    //    //{
+                    //    //    triangle.SetCollisionAt( t, hit_negative.point );
+
+                    //    //    continue;
+                    //    //}
+                    //}
+
                     bool isHit = data.colliderSlicer.Raycast( R , out RaycastHit hit, float.MaxValue );
 
-                    triangle.SetValueAt( t, vi );
-                    
                     if( ! isHit )
                     {
                         in_bounds_count ++ ;
@@ -70,6 +98,7 @@ namespace SurfacePacking
                             
                             data.verticesInBounds.Add( vi ); 
                     }
+
                     else triangle.SetCollisionAt( t, hit.point );
                 }
                 
@@ -109,7 +138,7 @@ namespace SurfacePacking
             int removed = 0;
             
             var start_time = Time.realtimeSinceStartup;
-
+            
             var cooldown = start_time;
             
             float len = data.spheres.Count;

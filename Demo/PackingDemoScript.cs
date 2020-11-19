@@ -11,7 +11,7 @@ namespace SurfacePacking
         [Header("Game Object References")]
         public MeshFilter slicer;
         public MeshFilter target;
-        public MeshFilter remover = null; // can be null
+        public Transform[] erasers;
         public PackingDemoDraw draw;
 
         // Spheres Sizes 
@@ -59,7 +59,12 @@ namespace SurfacePacking
             
             // Create data
             
-            data = PackingThreadData.Extract( target, slicer, sizes, remover );
+            data = PackingThreadData.Extract( target, slicer, sizes );
+
+            for( var e = 0; e < erasers.Length; ++e )
+            {
+                data.AddSubstractingCube( erasers[ e ] );
+            }
             
             if( draw != null ) draw.data = data;
 

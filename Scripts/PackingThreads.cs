@@ -451,4 +451,35 @@ namespace SurfacePacking
             }
         }
     }
+
+    public class NegativeSpaceCleaner : ThreadedJob
+    {
+        int count = 0;
+        
+        protected override void Finished( )
+        {
+            if( ! PackingConfig.logThreadTimes ) return;
+
+            Debug.Log("NegativeSpaceCleaner.count = " + count );
+        }
+
+        protected override void Execute( )
+        {
+            int len = data.spheres.Count;
+            
+            for(var i = 0; i < len; ++i)
+            {
+                m_Progress = i / ( float ) len;
+                
+                var S = data.spheres[ i ];
+
+                if( data.PointIsInsideNegativeSpace( S.position ) )
+                {
+                    S.isDead = true;
+
+                    data.spheres[ i ] = S;
+                }
+            }
+        }
+    }
 }

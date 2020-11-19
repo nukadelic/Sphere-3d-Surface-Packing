@@ -42,6 +42,26 @@ namespace SurfacePacking
             
             //return data.triangles[ ti ];
         }
+
+        public static bool ContainesWolrdPoint( this PrimitiveCubeData cube , Vector3 point )
+        {
+            var p = cube.worldToLocal * ( cube.position - point );
+
+            return Mathf.Abs( p.x ) < 0.5f && Mathf.Abs( p.y ) < 0.5f && Mathf.Abs( p.z ) < 0.5f;
+        }
+        
+        public static bool PointIsInsideNegativeSpace( this PackingThreadData data, Vector3 point )
+        {
+            if(  data.subtractingCubes.Count < 1 ) return false;
+
+            foreach( var subCube in data.subtractingCubes )
+
+                if( subCube.ContainesWolrdPoint( point ) )
+
+                    return true;
+
+            return false;
+        }
         
         public static Vector3 CalcRandomPoint( this PackingThreadData data, int triangle_index )
         {

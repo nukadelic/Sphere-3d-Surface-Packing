@@ -73,12 +73,14 @@
 
                 // 6 * PackingConfig.solverCount
                 
+                yield return Activate( new NegativeSpaceCleaner() );        stepCount ++ ;
                 yield return Activate( new CollideSphereVsSphere() );       stepCount ++ ; // 0
                 yield return Activate( new CollideSphereVsSphere() );       stepCount ++ ; // 1
                 yield return Activate( new SphereCollisionCulling() );      stepCount ++ ;
                 yield return Activate( new CollideSphereVsSphere() );       stepCount ++ ; // 3
                 yield return Activate( new CollideSphereVsTriangles() );    stepCount ++ ;
                 yield return Activate( new OutofboundsCleaner() );          stepCount ++ ;
+
                 data.Cull();
             }
 
