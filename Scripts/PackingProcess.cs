@@ -15,7 +15,7 @@
 
         public int CurrentStep => stepCount;
 
-        public int TotalStepsCount => 4 + data.sphereSizes.Length * 1 + PackingConfig.solverCount * 6 + 1;
+        public int TotalStepsCount => 4 + data.sphereSizes.Length * 1 + PackingConfig.solverCount * 7 + 1;
 
         /// <summary> Get the progress value [0,1] of the current active process  </summary>
         public float CurrentStepProgress => active?.GetProgress() ?? 0f;
@@ -71,7 +71,7 @@
             {
                 while( IsPaused ) yield return null;
 
-                // 6 * PackingConfig.solverCount
+                // 7 * PackingConfig.solverCount
                 
                 yield return Activate( new NegativeSpaceCleaner() );        stepCount ++ ;
                 yield return Activate( new CollideSphereVsSphere() );       stepCount ++ ; // 0
